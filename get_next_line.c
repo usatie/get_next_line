@@ -6,16 +6,20 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 16:30:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 18:11:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 1024
+#endif
+
 char	*get_next_line(int fd)
 {
-	static int	prev_fd = -1;
 	static char	buf[BUFFER_SIZE + 1] = {0};
+	static int	prev_fd = -1;
 	static char	*cursor = NULL;
 	static int	read_next = 1;
 	char		*next_line;
