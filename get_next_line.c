@@ -6,29 +6,40 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 21:14:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 21:34:13 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1024
-#endif
-
-typedef struct s_buf
-{
-	char	buf[BUFFER_SIZE + 1];
-	char	*cursor;
-	int		rc;
-	int		prev_fd;
-}	t_buf;
-
-static void	t_buf_init(t_buf *b, int fd)
+static void	buf_init(t_buf *b, int fd)
 {
 	b->prev_fd = fd;
 	b->cursor = NULL;
 	b->rc = BUFFER_SIZE;
+}
+
+// DESCRIPTION
+// 	Appends c to the str and returns it.
+// 	Always new memory will be allocated and previous memory address
+// 	will be freed.
+static char	*append_realloc(char *str, char c)
+{
+	char	*new;
+	int		size;
+
+	size = 2;
+	if (str)
+		size += ft_strlen(str);
+	new = malloc(size);
+	if (str)
+	{
+		ft_strlcpy(new, str, size);
+		free(str);
+	}
+	new[size - 2] = c;
+	new[size - 1] = '\0';
+	return (new);
 }
 
 char	*get_next_line(int fd)
@@ -38,7 +49,7 @@ char	*get_next_line(int fd)
 
 	next_line = NULL;
 	if (b.prev_fd != fd)
-		t_buf_init(&b, fd);
+		buf_init(&b, fd);
 	while (b.cursor || b.rc == BUFFER_SIZE)
 	{
 		if (b.cursor == NULL)
