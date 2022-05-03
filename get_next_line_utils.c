@@ -6,12 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:35 by susami            #+#    #+#             */
-/*   Updated: 2022/05/02 21:37:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 11:26:08 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
 
 size_t	ft_strlen(const char *s)
 {

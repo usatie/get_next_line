@@ -6,14 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 06:42:29 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 11:22:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 char	*get_next_line(int fd)
 {
@@ -53,7 +50,7 @@ char	*get_next_line(int fd)
 
 		if (cursor == NULL)
 			return (NULL);
-		cursor = strchr(cursor, '\n');
+		cursor = ft_strchr(cursor, '\n');
 		if (cursor == NULL)
 		{
 			if (next_line == NULL)
@@ -69,7 +66,7 @@ char	*get_next_line(int fd)
 		}
 		if (cursor != NULL)
 		{
-			bzero(strchr(next_line, '\n') + 1, ft_strlen(cursor));
+			*(ft_strchr(next_line, '\n') + 1) = '\0';
 			cursor++;
 			if (cursor == &buf[rc])
 				cursor = NULL;

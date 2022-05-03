@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:43 by susami            #+#    #+#             */
-/*   Updated: 2022/05/02 21:38:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 11:23:33 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # include <unistd.h>
+# include <stdlib.h>
 
 char	*get_next_line(int fd);
 
