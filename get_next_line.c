@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 19:22:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 19:23:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_next_line(int fd)
 	static char	buf[BUFFER_SIZE + 1] = {0};
 	static int	prev_fd = -1;
 	static char	*cursor = NULL;
-	static int	rc = -1;
+	int			rc;
 	static int	read_next = 1;
 	char		*next_line;
 
