@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 21:37:14 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 22:32:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 23:06:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,17 @@ static char	*append_realloc(char *str, char c)
 	return (new);
 }
 
+// returns negative on error
+static int	read_to_buf(t_buf *b, int fd, int i)
+{
+	b->rc[i] = read(fd, b->buf[i], BUFFER_SIZE);
+	if (b->rc[i] < 0)
+		return (-1);
+	b->buf[i][b->rc[i]] = '\0';
+	b->cursor[i] = b->buf[i];
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
 	static t_buf	b;
@@ -67,13 +78,8 @@ char	*get_next_line(int fd)
 	while (b.cursor[i] || b.rc[i] == BUFFER_SIZE)
 	{
 		if (b.cursor[i] == NULL)
-		{
-			b.rc[i] = read(fd, b.buf[i], BUFFER_SIZE);
-			if (b.rc[i] < 0)
+			if (read_to_buf(&b, fd, i) < 0)
 				return (NULL);
-			b.buf[i][b.rc[i]] = '\0';
-			b.cursor[i] = b.buf[i];
-		}
 		while (*b.cursor[i])
 		{
 			next_line = append_realloc(next_line, *b.cursor[i]);
@@ -82,5 +88,6 @@ char	*get_next_line(int fd)
 		}
 		b.cursor[i] = NULL;
 	}
+	b.rc[i] = BUFFER_SIZE;
 	return (next_line);
 }
