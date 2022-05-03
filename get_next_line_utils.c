@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:35 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 11:26:08 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 16:28:06 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,21 @@ char	*ft_strchr(const char *s, int c)
 	}
 }
 
+// dst will be freed. And returns newly allocated memory address.
+// Example. 
+//	 NULL + NULL = NULL
+//	 NULL + "" = ""
+//	 "" + NULL = ""
+//	 NULL + "hello" = "hello"
+//	 "hello" + NULL = "hello"
+//	 "hello" + "world" = "helloworld"
 char	*strcat_realloc(char *dst, char *src)
 {
 	char	*new;
 	int		size;
 
+	if (dst == NULL && src == NULL)
+		return (NULL);
 	size = 1;
 	if (dst)
 		size += ft_strlen(dst);
@@ -102,6 +112,7 @@ char	*strcat_realloc(char *dst, char *src)
 		ft_strlcpy(new, dst, size);
 		free(dst);
 	}
-	ft_strlcat(new, src, size);
+	if (src)
+		ft_strlcat(new, src, size);
 	return (new);
 }

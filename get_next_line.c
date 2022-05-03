@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 16:14:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 16:30:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*get_next_line(int fd)
 	static char	*cursor = NULL;
 	static int	read_next = 1;
 	char		*next_line;
+	int			rc;
 
 	if (prev_fd != fd)
 	{
@@ -26,26 +27,23 @@ char	*get_next_line(int fd)
 		cursor = NULL;
 		read_next = 1;
 	}
-	next_line = NULL;
-	if (cursor != NULL)
-		next_line = strcat_realloc(NULL, cursor);
+	if (cursor == NULL && read_next == 0)
+		return (NULL);
+	next_line = strcat_realloc(NULL, cursor);
 	while (1)
 	{
 		if (read_next && cursor == NULL)
 		{
-			int	rc = read(fd, buf, BUFFER_SIZE);
+			rc = read(fd, buf, BUFFER_SIZE);
 			if (rc < 0)
 				return (NULL);
-			else if (rc < BUFFER_SIZE)
-				read_next = 0;
 			buf[rc] = '\0';
 			cursor = buf;
-			if (ft_strlen(buf) > 0)
+			if (rc > 0)
 				next_line = strcat_realloc(next_line, buf);
+			if (rc < BUFFER_SIZE)
+				read_next = 0;
 		}
-
-		if (cursor == NULL)
-			return (NULL);
 		cursor = ft_strchr(cursor, '\n');
 		if (cursor != NULL)
 		{
