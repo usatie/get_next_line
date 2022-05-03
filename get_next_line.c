@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 11:22:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 14:43:50 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*get_next_line(int fd)
 {
 	static int	prev_fd = -1;
 	static char	buf[BUFFER_SIZE + 1] = {0};
-	static int	rc = 0;
 	static char	*cursor = NULL;
 	static int	read_next = 1;
 	char		*next_line;
@@ -24,7 +23,6 @@ char	*get_next_line(int fd)
 	if (prev_fd != fd)
 	{
 		prev_fd = fd;
-		rc = 0;
 		cursor = NULL;
 		read_next = 1;
 	}
@@ -35,7 +33,7 @@ char	*get_next_line(int fd)
 	{
 		if (read_next && cursor == NULL)
 		{
-			rc = read(fd, buf, BUFFER_SIZE);
+			int	rc = read(fd, buf, BUFFER_SIZE);
 			if (rc < 0)
 			{
 				//printf("rc is negative.\n");
@@ -60,7 +58,7 @@ char	*get_next_line(int fd)
 				free(next_line);
 				return (NULL);
 			}
-			else if (rc == BUFFER_SIZE)
+			else if (read_next)
 				continue ;
 			return (next_line);
 		}
@@ -68,7 +66,7 @@ char	*get_next_line(int fd)
 		{
 			*(ft_strchr(next_line, '\n') + 1) = '\0';
 			cursor++;
-			if (cursor == &buf[rc])
+			if (*cursor == '\0')
 				cursor = NULL;
 			return (next_line);
 		}
