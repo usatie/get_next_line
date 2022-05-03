@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 18:11:45 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 19:22:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,43 +21,40 @@ char	*get_next_line(int fd)
 	static char	buf[BUFFER_SIZE + 1] = {0};
 	static int	prev_fd = -1;
 	static char	*cursor = NULL;
+	static int	rc = -1;
 	static int	read_next = 1;
 	char		*next_line;
-	int			rc;
 
+	next_line = NULL;
 	if (prev_fd != fd)
 	{
 		prev_fd = fd;
 		cursor = NULL;
 		read_next = 1;
 	}
-	if (cursor == NULL && read_next == 0)
-		return (NULL);
-	next_line = strcat_realloc(NULL, cursor);
-	while (1)
+	while (cursor || read_next)
 	{
-		if (read_next && cursor == NULL)
+		if (cursor == NULL)
 		{
 			rc = read(fd, buf, BUFFER_SIZE);
+			// 1. read fail
 			if (rc < 0)
 				return (NULL);
 			buf[rc] = '\0';
 			cursor = buf;
-			if (rc > 0)
-				next_line = strcat_realloc(next_line, buf);
 			if (rc < BUFFER_SIZE)
 				read_next = 0;
 		}
-		cursor = ft_strchr(cursor, '\n');
-		if (cursor != NULL)
+		while (*cursor)
 		{
-			*(ft_strchr(next_line, '\n') + 1) = '\0';
-			cursor++;
-			if (*cursor == '\0')
-				cursor = NULL;
-			return (next_line);
+			// 1. append(next_line, *cursor)
+			next_line = append_realloc(next_line, *cursor);
+			// 2. if *cursor == '\n' return
+			if (*cursor++ == '\n')
+				return (next_line);
 		}
-		else if (read_next == 0)
-			return (next_line);
+		// 2. if cursor is '\0'
+		cursor = NULL;
 	}
+	return (next_line);
 }

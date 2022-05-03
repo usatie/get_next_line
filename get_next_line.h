@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:43 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 11:23:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 19:18:00 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,5 @@ size_t	ft_strlen(const char *s);
 // static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 // static size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 char	*ft_strchr(const char *s, int c);
-char	*strcat_realloc(char *dst, char *src);
+char	*append_realloc(char *str, char c);
 #endif

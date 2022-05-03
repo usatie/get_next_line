@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:35 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 16:28:06 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/03 19:21:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,33 +43,6 @@ static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (src_size);
 }
 
-static size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
-{
-	size_t	cnt;
-
-	if (dstsize == 0 || ft_strlen(dst) >= dstsize)
-		return (dstsize + ft_strlen(src));
-	if (ft_strlen(src) == 0)
-		return (ft_strlen(dst));
-	cnt = 0;
-	while (*dst && cnt < dstsize - 1)
-	{
-		dst++;
-		cnt++;
-	}
-	while (*src && cnt < dstsize - 1)
-	{
-		*dst = *src;
-		dst++;
-		src++;
-		cnt++;
-	}
-	*dst = '\0';
-	while (*src++)
-		cnt++;
-	return (cnt);
-}
-
 char	*ft_strchr(const char *s, int c)
 {
 	char	ch;
@@ -85,34 +58,22 @@ char	*ft_strchr(const char *s, int c)
 	}
 }
 
-// dst will be freed. And returns newly allocated memory address.
-// Example. 
-//	 NULL + NULL = NULL
-//	 NULL + "" = ""
-//	 "" + NULL = ""
-//	 NULL + "hello" = "hello"
-//	 "hello" + NULL = "hello"
-//	 "hello" + "world" = "helloworld"
-char	*strcat_realloc(char *dst, char *src)
+// str will be freed. And returns newly allocated memory address.
+char	*append_realloc(char *str, char c)
 {
 	char	*new;
 	int		size;
 
-	if (dst == NULL && src == NULL)
-		return (NULL);
-	size = 1;
-	if (dst)
-		size += ft_strlen(dst);
-	if (src)
-		size += ft_strlen(src);
-	new = malloc(sizeof(char) * size);
-	new[0] = '\0';
-	if (dst)
+	size = 2;
+	if (str)
+		size += ft_strlen(str);
+	new = malloc(size);
+	if (str)
 	{
-		ft_strlcpy(new, dst, size);
-		free(dst);
+		ft_strlcpy(new, str, size);
+		free(str);
 	}
-	if (src)
-		ft_strlcat(new, src, size);
+	new[size - 2] = c;
+	new[size - 1] = '\0';
 	return (new);
 }
