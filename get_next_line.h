@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:43 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 21:34:00 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/04 22:21:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_buf
 {
 	char	buf[BUFFER_SIZE + 1];
 	char	*cursor;
-	int		rc;
+	ssize_t	rc;
 	int		prev_fd;
 }	t_buf;
 

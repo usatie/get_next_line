@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 21:37:47 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 22:33:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/04 22:21:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct s_buf
 	int		fd[FOPEN_MAX];
 	char	buf[FOPEN_MAX][BUFFER_SIZE + 1];
 	char	*cursor[FOPEN_MAX];
-	int		rc[FOPEN_MAX];
+	ssize_t	rc[FOPEN_MAX];
 }	t_buf;
 
 // get_next_line_bonus.c
