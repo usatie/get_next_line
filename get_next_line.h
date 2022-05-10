@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:43 by susami            #+#    #+#             */
-/*   Updated: 2022/05/04 22:21:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/11 07:26:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,9 @@ typedef struct s_buf
 	char	buf[BUFFER_SIZE + 1];
 	char	*cursor;
 	ssize_t	rc;
-	int		prev_fd;
 }	t_buf;
 
 // get_next_line.c
-// static void	buf_init(t_buf *b, int fd)
-// static char	*append_realloc(char *str, char c);
 char			*get_next_line(int fd);
 
 // get_next_line_utils.c

@@ -6,38 +6,18 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/03 23:09:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/11 07:25:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// DESCRIPTION
-// 	Appends c to the str and returns it.
-// 	Always new memory will be allocated and previous memory address
-// 	will be freed.
-static char	*append_realloc(char *str, char c)
+// SUCCESS	: returns (0)
+// ERROR	: returns (-1)
+static int	read_to_buf_if_needed(t_buf *b, int fd)
 {
-	char	*new;
-	int		size;
-
-	size = 2;
-	if (str)
-		size += ft_strlen(str);
-	new = malloc(size);
-	if (str)
-	{
-		ft_strlcpy(new, str, size);
-		free(str);
-	}
-	new[size - 2] = c;
-	new[size - 1] = '\0';
-	return (new);
-}
-
-// returns negative on error
-static int	read_to_buf(t_buf *b, int fd)
-{
+	if (b->cursor != NULL)
+		return (0);
 	b->rc = read(fd, b->buf, BUFFER_SIZE);
 	if (b->rc < 0)
 		return (-1);
@@ -46,25 +26,73 @@ static int	read_to_buf(t_buf *b, int fd)
 	return (0);
 }
 
+// ""				: returns (0)
+// "\n"				: returns (1)
+// "abcde"			: returns (5)
+// "abcde\n12345"	: returns (6)
+static size_t	len_to_cat(char *str)
+{
+	size_t	len;
+
+	len = 0;
+	while (*str && *str != '\n')
+	{
+		len++;
+		str++;
+	}
+	if (*str == '\n')
+		len++;
+	return (len);
+}
+
+// 	s1 will always be freed even if on error.
+static char	*strncat_reallocf(char *s1, char *s2)
+{
+	size_t	s1_len;
+	size_t	new_len;
+	char	*new;
+
+	s1_len = 0;
+	if (s1)
+		s1_len = ft_strlen(s1);
+	new_len = s1_len + len_to_cat(s2) + 1;
+	new = malloc(new_len);
+	if (new == NULL)
+	{
+		if (s1)
+			free(s1);
+		return (NULL);
+	}
+	if (s1)
+	{
+		ft_strlcpy(new, s1, new_len);
+		free(s1);
+	}
+	ft_strlcpy(new + s1_len, s2, len_to_cat(s2) + 1);
+	return (new);
+}
+
 char	*get_next_line(int fd)
 {
-	static t_buf	b = {{0}, NULL, BUFFER_SIZE, -1};
-	char			*next_line;
+	static t_buf	b;
+	char			*line;
 
-	next_line = NULL;
+	line = NULL;
 	while (b.cursor || b.rc == BUFFER_SIZE)
 	{
-		if (b.cursor == NULL)
-			if (read_to_buf(&b, fd) < 0)
-				return (NULL);
-		while (*b.cursor)
+		if (read_to_buf_if_needed(&b, fd) < 0)
+			return (NULL);
+		if (*b.cursor != '\0')
 		{
-			next_line = append_realloc(next_line, *b.cursor);
-			if (*b.cursor++ == '\n')
-				return (next_line);
+			line = strncat_reallocf(line, b.cursor);
+			if (line == NULL)
+				return (NULL);
+			b.cursor += len_to_cat(b.cursor);
+			if (*(b.cursor - 1) == '\n')
+				return (line);
 		}
 		b.cursor = NULL;
 	}
 	b.rc = BUFFER_SIZE;
-	return (next_line);
+	return (line);
 }
