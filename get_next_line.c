@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/11 07:25:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:05:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static char	*strncat_reallocf(char *s1, char *s2)
 
 char	*get_next_line(int fd)
 {
-	static t_buf	b;
+	static t_buf	b = {{0}, NULL, BUFFER_SIZE};
 	char			*line;
 
 	line = NULL;
