@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 21:37:14 by susami            #+#    #+#             */
-/*   Updated: 2022/05/11 07:27:58 by susami           ###   ########.fr       */
+/*   Updated: 2022/06/14 15:41:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	get_fd_index(t_buf *b, int fd)
 // returns negative on error
 static int	read_to_buf_if_needed(t_buf *b, int fd, int i)
 {
-	if (b->cursors[i] != NULL)
+	if (b->cursors[i] != NULL && *(b->cursors[i]) != '\0')
 		return (0);
 	b->rcs[i] = read(fd, b->bufs[i], BUFFER_SIZE);
 	if (b->rcs[i] < 0)

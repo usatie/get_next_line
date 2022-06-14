@@ -6,17 +6,18 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/05/11 09:05:45 by susami           ###   ########.fr       */
+/*   Updated: 2022/06/14 15:39:47 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "get_next_line.h"
 
 // SUCCESS	: returns (0)
 // ERROR	: returns (-1)
 static int	read_to_buf_if_needed(t_buf *b, int fd)
 {
-	if (b->cursor != NULL)
+	if (b->cursor != NULL && *(b->cursor) != '\0')
 		return (0);
 	b->rc = read(fd, b->buf, BUFFER_SIZE);
 	if (b->rc < 0)
