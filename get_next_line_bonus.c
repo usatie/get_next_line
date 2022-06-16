@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 21:37:14 by susami            #+#    #+#             */
-/*   Updated: 2022/06/14 15:41:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/06/16 11:36:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	get_fd_index(t_buf *b, int fd)
 	if (i < FOPEN_MAX)
 	{
 		b->fds[i] = fd;
-		b->rcs[i] = BUFFER_SIZE;
+		b->rcs[i] = 0;
 		b->fd_len++;
 		return (i);
 	}
@@ -98,10 +98,12 @@ char	*get_next_line(int fd)
 	i = get_fd_index(&b, fd);
 	if (i < 0)
 		return (NULL);
-	while (b.cursors[i] || b.rcs[i] == BUFFER_SIZE)
+	while (1)
 	{
 		if (read_to_buf_if_needed(&b, fd, i) < 0)
 			return (NULL);
+		else if (b.rcs[i] == 0)
+			return (line);
 		if (*b.cursors[i] != '\0')
 		{
 			line = strncat_reallocf(line, b.cursors[i]);
@@ -113,6 +115,4 @@ char	*get_next_line(int fd)
 		}
 		b.cursors[i] = NULL;
 	}
-	b.rcs[i] = BUFFER_SIZE;
-	return (line);
 }

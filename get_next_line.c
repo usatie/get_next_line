@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:21:27 by susami            #+#    #+#             */
-/*   Updated: 2022/06/14 15:39:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/06/16 11:35:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,16 @@ static char	*strncat_reallocf(char *s1, char *s2)
 
 char	*get_next_line(int fd)
 {
-	static t_buf	b = {{0}, NULL, BUFFER_SIZE};
+	static t_buf	b;
 	char			*line;
 
 	line = NULL;
-	while (b.cursor || b.rc == BUFFER_SIZE)
+	while (1)
 	{
 		if (read_to_buf_if_needed(&b, fd) < 0)
 			return (NULL);
+		else if (b.rc == 0)
+			return (line);
 		if (*b.cursor != '\0')
 		{
 			line = strncat_reallocf(line, b.cursor);
@@ -94,6 +96,4 @@ char	*get_next_line(int fd)
 		}
 		b.cursor = NULL;
 	}
-	b.rc = BUFFER_SIZE;
-	return (line);
 }
